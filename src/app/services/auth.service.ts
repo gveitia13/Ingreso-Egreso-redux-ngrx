@@ -12,10 +12,15 @@ import {Store} from "@ngrx/store";
 })
 export class AuthService {
   userSubscription: Subscription | undefined
+  private _user: Usuario | null = null
 
   constructor(public auth: AngularFireAuth,
               private firestore: AngularFirestore,
               private store: Store<AppState>) {
+  }
+
+  get user(): Usuario | null {
+    return this._user;
   }
 
   initAuthListener() {
@@ -23,12 +28,12 @@ export class AuthService {
       if (fuser) {
         this.userSubscription = this.firestore.doc(`${fuser.uid}/usuario`).valueChanges()
           .subscribe(fireStoreUser => {
-            console.log(fireStoreUser)
             const user = Usuario.fromFirebase(fireStoreUser)
-
+            this._user = user
             this.store.dispatch(authActions.setUser({user}))
           })
       } else {
+        this._user = null
         this.userSubscription?.unsubscribe()
         this.store.dispatch(authActions.unSetUser())
       }

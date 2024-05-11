@@ -1,10 +1,10 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {AppState} from "../../app.reducer";
 import {IngresoEgreso} from "../../models/ingreso-egreso.model";
 import {Subscription} from "rxjs";
 import {IngresoEgresoService} from "../../services/ingreso-egreso.service";
 import Swal from "sweetalert2";
+import {AppStateIngresoEgreso} from "../ingreso-egreso.reducer";
 
 @Component({
   selector: 'app-detalle',
@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 })
 export class DetalleComponent implements OnInit, OnDestroy {
 
-  private store = inject(Store<AppState>)
+  private store = inject(Store<AppStateIngresoEgreso>)
   private ingresoEgresoService = inject(IngresoEgresoService)
   ingresosEgresos: IngresoEgreso[] = []
   ingresosEgresosSubscription: Subscription | undefined

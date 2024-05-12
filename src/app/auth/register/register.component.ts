@@ -39,21 +39,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   crearUsuario() {
     if (this.registroForm.invalid) return
-    /*Swal.fire({
-      title: 'Espere por favor',
-      didOpen: () => {
-        Swal.showLoading()
-      }
-    })*/
     this.store.dispatch(ui.isLoading())
 
     const {nombre, correo, password} = this.registroForm.value
     this.authService.crearUsuario(nombre, correo, password)
       .then(credenciales => {
-        console.log(credenciales)
-        // Swal.close()
         this.store.dispatch(ui.stopLoading())
-
         this.router.navigate(['/'])
       })
       .catch(err => {
@@ -64,5 +55,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           text: err.message,
         })
       })
+      .finally(() => this.store.dispatch(ui.stopLoading()))
   }
 }
